@@ -1,0 +1,31 @@
+{
+  "name": "tds-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-prod": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexander-welshtein/tds-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexander-welshtein/tds-game/issues"
+  },
+  "homepage": "https://github.com/alexander-welshtein/tds-game#readme",
+  "dependencies": {
+    "pixi.js": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "ts-loader": "latest",
+    "file-loader": "latest",
+    "html-webpack-plugin": "latest"
+  }
+}
