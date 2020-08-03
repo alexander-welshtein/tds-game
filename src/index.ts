@@ -5,7 +5,12 @@ const app = new PIXI.Application()
 
 document.body.appendChild(app.view)
 
-app.loader.add('hull', 'hull.png').load((loader, resources) => {
+app.loader.add([
+    {
+        name: 'hull',
+        url: 'hull.png'
+    }
+]).load((loader, resources) => {
     const hull = new PIXI.Sprite(resources.hull.texture)
 
     hull.x = app.renderer.width / 2
@@ -16,7 +21,11 @@ app.loader.add('hull', 'hull.png').load((loader, resources) => {
 
     app.stage.addChild(hull)
 
-    app.ticker.add(() => {
-        hull.rotation += .01
-    })
+    window.addEventListener('keydown', e => ({
+        [e.key]: () => {},
+        'a': () => hull.x -= 10,
+        'd': () => hull.x += 10,
+        'w': () => hull.y -= 10,
+        's': () => hull.y += 10,
+    }[e.key]()))
 })
