@@ -21,11 +21,22 @@ app.loader.add([
 
     app.stage.addChild(hull)
 
-    window.addEventListener('keydown', e => ({
-        [e.key]: () => {},
-        'a': () => hull.x -= 10,
-        'd': () => hull.x += 10,
-        'w': () => hull.y -= 10,
-        's': () => hull.y += 10,
-    }[e.key]()))
+    const keys = {
+        a: false,
+        d: false,
+        w: false,
+        s: false
+    }
+
+    Object.keys(keys).forEach(key => {
+        window.addEventListener('keydown', e => e.key == key && (keys[key] = true))
+        window.addEventListener('keyup', e => e.key == key && (keys[key] = false))
+    })
+
+    app.ticker.add(() => {
+        keys.a && (hull.x -= 5)
+        keys.d && (hull.x += 5)
+        keys.w && (hull.y -= 5)
+        keys.s && (hull.y += 5)
+    })
 })
