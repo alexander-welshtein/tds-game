@@ -2,15 +2,15 @@ const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./public/src/index.ts",
     output: {
-        path: path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "public/dist"),
         filename: "bundle.js"
     },
     resolve: {
         extensions: [".ts", ".js"],
         alias: {
-            assets: path.join(__dirname, "assets")
+            assets: path.join(__dirname, "public/assets")
         }
     },
     devServer: {
@@ -23,7 +23,7 @@ module.exports = {
         open: true
     },
     plugins: [new HtmlWebpackPlugin({
-        template: "./src/index.html"
+        template: "./public/src/index.html"
     })],
     module: {
         rules: [

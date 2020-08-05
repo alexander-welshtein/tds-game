@@ -1,0 +1,9 @@
+[package]
+name = "tds-game"
+version = "0.1.0"
+authors = ["Alexander Welshtein <alexanderwelshtein@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+actix-web = "3.0.0-beta.1"
+actix-files = "0.3.0-beta.1"
