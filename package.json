@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
+    "watch": "webpack --watch --mode development",
     "build": "webpack --mode production"
   },
   "repository": {
@@ -25,7 +25,6 @@
     "typescript": "latest",
     "webpack": "latest",
     "webpack-cli": "latest",
-    "webpack-dev-server": "latest",
     "ts-loader": "latest",
     "file-loader": "latest",
     "html-webpack-plugin": "latest"

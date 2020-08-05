@@ -13,15 +13,6 @@ module.exports = {
             assets: path.join(__dirname, "public/assets")
         }
     },
-    devServer: {
-        contentBase: path.join(__dirname, "dist"),
-        compress: true,
-        watchContentBase: true,
-        progress: true,
-        port: 3000,
-        hot: true,
-        open: true
-    },
     plugins: [new HtmlWebpackPlugin({
         template: "./public/src/index.html"
     })],
