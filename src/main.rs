@@ -1,4 +1,5 @@
-mod transfer;
+mod manager;
+mod client_state;
 mod main_web_socket;
 
 use actix_files as fs;

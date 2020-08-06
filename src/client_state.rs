@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct Transfer {
+pub struct ClientState {
     pub player: Player
 }
 
-impl Transfer {
+impl ClientState {
     pub fn new() -> Self {
         Self { player: Player::new() }
     }
@@ -15,6 +15,7 @@ impl Transfer {
 pub struct Player {
     pub x: isize,
     pub y: isize,
+    pub speed: isize
 }
 
 impl Player {
@@ -22,6 +23,7 @@ impl Player {
         Self {
             x: 0,
             y: 0,
+            speed: 5
         }
     }
 }
