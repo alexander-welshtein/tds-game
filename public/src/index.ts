@@ -39,4 +39,14 @@ app.loader.add([
         keys.w && (hull.y -= 5)
         keys.s && (hull.y += 5)
     })
+
+    const socket = new WebSocket('ws://localhost:3000/ws/')
+
+    socket.addEventListener('open', function() {
+        this.send('Hello Server!')
+    })
+
+    socket.addEventListener('message', function(event) {
+        console.log(event)
+    })
 })
