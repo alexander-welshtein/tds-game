@@ -1,12 +1,14 @@
 use std::time::{Instant, Duration};
 use actix::{Actor, StreamHandler, AsyncContext, ActorContext};
 use actix_web_actors::ws;
+use crate::transfer;
 
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
 
 pub struct MainWebSocket {
-    hb: Instant
+    hb: Instant,
+    transfer: transfer::Transfer,
 }
 
 impl Actor for MainWebSocket {
@@ -29,7 +31,22 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
             Ok(ws::Message::Pong(_)) => {
                 self.hb = Instant::now();
             }
-            Ok(ws::Message::Text(text)) => ctx.text(text),
+            Ok(ws::Message::Text(text)) => {
+                match text.as_str() {
+                    "MoveLeft" => self.transfer.player.x -= 5,
+                    "MoveRight" => self.transfer.player.x += 5,
+                    "MoveUp" => self.transfer.player.y -= 5,
+                    "MoveDown" => self.transfer.player.y += 5,
+                    _ => {}
+                };
+
+                let result = match serde_json::to_string(&self.transfer) {
+                    Ok(result) => result,
+                    Err(_error) => String::from("{}")
+                };
+
+                ctx.text(result)
+            }
             Ok(ws::Message::Close(reason)) => {
                 ctx.close(reason);
                 ctx.stop();
@@ -41,7 +58,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
 
 impl MainWebSocket {
     pub fn new() -> Self {
-        Self { hb: Instant::now() }
+        Self { hb: Instant::now(), transfer: transfer::Transfer::new() }
     }
 
     fn hb(&self, ctx: &mut <Self as Actor>::Context) {

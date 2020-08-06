@@ -1,3 +1,4 @@
+mod transfer;
 mod main_web_socket;
 
 use actix_files as fs;

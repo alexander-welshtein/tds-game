@@ -21,6 +21,19 @@ app.loader.add([
 
     app.stage.addChild(hull)
 
+    const socket = new WebSocket('ws://localhost:3000/ws/')
+
+    socket.addEventListener('open', function() {
+        this.send('Hello Server!')
+    })
+
+    socket.addEventListener('message', function(event) {
+        const transfer = JSON.parse(event.data) as Transfer
+
+        hull.x = transfer.player.x
+        hull.y = transfer.player.y
+    })
+
     const keys = {
         a: false,
         d: false,
@@ -34,19 +47,9 @@ app.loader.add([
     })
 
     app.ticker.add(() => {
-        keys.a && (hull.x -= 5)
-        keys.d && (hull.x += 5)
-        keys.w && (hull.y -= 5)
-        keys.s && (hull.y += 5)
-    })
-
-    const socket = new WebSocket('ws://localhost:3000/ws/')
-
-    socket.addEventListener('open', function() {
-        this.send('Hello Server!')
-    })
-
-    socket.addEventListener('message', function(event) {
-        console.log(event)
+        keys.a && socket.readyState === socket.OPEN && socket.send('MoveLeft')
+        keys.d && socket.readyState === socket.OPEN && socket.send('MoveRight')
+        keys.w && socket.readyState === socket.OPEN && socket.send('MoveUp')
+        keys.s && socket.readyState === socket.OPEN && socket.send('MoveDown')
     })
 })
