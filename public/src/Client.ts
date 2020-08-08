@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js"
-import {ClientState} from "./ClientState";
+import {ClientState, Operation} from "./ClientState";
+import {MathSet} from "./MathSet";
 
 export function Client(config: {
     app: PIXI.Application
@@ -23,9 +24,20 @@ export function Client(config: {
     socket.addEventListener('message', function (event) {
         state = JSON.parse(event.data) as ClientState
 
-        hull.x = state.player.x
-        hull.y = state.player.y
+       if (state.operation.id == lastOperation.id) {
+           hull.x = state.player.x
+           hull.y = state.player.y
+       }
     })
+
+    let lastOperation: Operation
+
+    const send = (command: string) => {
+        socket.send(JSON.stringify(lastOperation = {
+            id: MathSet.randomNumberByMax(10000),
+            command
+        } as Operation))
+    }
 
     const keys = {
         a: false,
@@ -42,22 +54,22 @@ export function Client(config: {
     config.app.ticker.add(() => {
         if (keys.a) {
             hull.x -= state.player.speed
-            socket.readyState === socket.OPEN && socket.send('MoveLeft')
+            socket.readyState === socket.OPEN && send('MoveLeft')
         }
 
         if (keys.d) {
             hull.x += state.player.speed
-            socket.readyState === socket.OPEN && socket.send('MoveRight')
+            socket.readyState === socket.OPEN && send('MoveRight')
         }
 
         if (keys.w) {
             hull.y -= state.player.speed
-            socket.readyState === socket.OPEN && socket.send('MoveUp')
+            socket.readyState === socket.OPEN && send('MoveUp')
         }
 
         if (keys.s) {
             hull.y += state.player.speed
-            keys.s && socket.readyState === socket.OPEN && socket.send('MoveDown')
+            socket.readyState === socket.OPEN && send('MoveDown')
         }
     })
 }

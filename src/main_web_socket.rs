@@ -1,7 +1,7 @@
 use std::time::{Instant, Duration};
 use actix::{Actor, StreamHandler, AsyncContext, ActorContext};
 use actix_web_actors::ws;
-use crate::client_state::ClientState;
+use crate::client_state::{ClientState, Operation};
 use crate::manager::change_client_state;
 
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
@@ -33,14 +33,19 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
                 self.hb = Instant::now();
             }
             Ok(ws::Message::Text(text)) => {
-                change_client_state(text.as_str(), &mut self.state);
+                let operation: Operation = match serde_json::from_str(&*text) {
+                  Ok(operation) => operation,
+                    Err(_error) => Operation::new()
+                };
 
-                let result = match serde_json::to_string(&self.state) {
+                change_client_state(operation, &mut self.state);
+
+                let state = match serde_json::to_string(&self.state) {
                     Ok(result) => result,
                     Err(_error) => String::from("{}")
                 };
 
-                ctx.text(result);
+                ctx.text(state);
             }
             Ok(ws::Message::Close(reason)) => {
                 ctx.close(reason);

@@ -1,7 +1,10 @@
-use crate::client_state::ClientState;
+use crate::client_state::{ClientState, Operation};
 
-pub fn change_client_state(command: &str, state: &mut ClientState) {
-    match command {
+pub fn change_client_state(operation: Operation, state: &mut ClientState) {
+    state.operation.id = operation.id;
+    state.operation.command = operation.command;
+
+    match operation.command.as_str() {
         "MoveLeft" => state.player.x -= state.player.speed,
         "MoveRight" => state.player.x += state.player.speed,
         "MoveUp" => state.player.y -= state.player.speed,
