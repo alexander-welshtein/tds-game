@@ -24,7 +24,7 @@ export function Client(config: {
     socket.addEventListener('message', function (event) {
         state = JSON.parse(event.data) as ClientState
 
-       if (state.operation.id == lastOperation.id) {
+       if (state.operation.id == (lastOperation || {}).id) {
            hull.x = state.player.x
            hull.y = state.player.y
        }
