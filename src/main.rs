@@ -1,14 +1,16 @@
-mod manager;
-mod client_state;
-mod main_web_socket;
+mod world;
+mod transfer;
+mod socket;
 
 use actix_files as fs;
 use actix_web::{web, App, HttpServer, Result, HttpRequest, HttpResponse, Error, middleware};
 use actix_web_actors::{ws};
+use crate::world::World;
+use actix::{Actor, Addr};
 
-async fn ws_index(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
+async fn ws_index(req: HttpRequest, stream: web::Payload, srv: web::Data<Addr<World>>) -> Result<HttpResponse, Error> {
     println!("{:?}", req);
-    ws::start(main_web_socket::MainWebSocket::new(), &req, stream)
+    ws::start(socket::MainWebSocket::new(srv.get_ref().clone()), &req, stream)
 }
 
 #[actix_web::main]
@@ -18,6 +20,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| App::new()
         .wrap(middleware::Logger::default())
+        .data(World::default().start())
         .service(web::resource("/ws/").route(web::get().to(ws_index)))
         .service(fs::Files::new("/", "public/dist").index_file("index.html")))
         .bind("localhost:3000")?

@@ -1,9 +1,10 @@
-export interface ClientState {
-    operation: Operation
+export interface Transfer {
+    session_id: number,
     player: {
         x: number,
         y: number,
-        speed: number
+        speed: number,
+        operation: Operation
     }
 }
 

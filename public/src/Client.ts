@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js"
-import {ClientState, Operation} from "./ClientState";
+import {Transfer, Operation} from "./Transfer";
 import {MathSet} from "./MathSet";
 
 export function Client(config: {
@@ -13,27 +13,27 @@ export function Client(config: {
 
     config.app.stage.addChild(hull)
 
-    let state: ClientState
+    let stored_transfer: Transfer
 
     const socket = new WebSocket('ws://localhost:3000/ws/')
 
     socket.addEventListener('open', function () {
-        this.send('Hello Server!')
+        send('JoinInstance')
     })
 
     socket.addEventListener('message', function (event) {
-        state = JSON.parse(event.data) as ClientState
+        const transfer = JSON.parse(event.data) as Transfer
 
-       if (state.operation.id == (lastOperation || {}).id) {
-           hull.x = state.player.x
-           hull.y = state.player.y
+       if (!stored_transfer || transfer.player.operation.id == stored_transfer.player.operation.id) {
+           hull.x = transfer.player.x
+           hull.y = transfer.player.y
        }
+
+       stored_transfer = transfer
     })
 
-    let lastOperation: Operation
-
     const send = (command: string) => {
-        socket.send(JSON.stringify(lastOperation = {
+        socket.send(JSON.stringify({
             id: MathSet.randomNumberByMax(10000),
             command
         } as Operation))
@@ -52,24 +52,26 @@ export function Client(config: {
     })
 
     config.app.ticker.add(() => {
-        if (keys.a) {
-            hull.x -= state.player.speed
-            socket.readyState === socket.OPEN && send('MoveLeft')
-        }
+        if (stored_transfer) {
+            if (keys.a) {
+                hull.x -= stored_transfer.player.speed
+                socket.readyState === socket.OPEN && send('MoveLeft')
+            }
 
-        if (keys.d) {
-            hull.x += state.player.speed
-            socket.readyState === socket.OPEN && send('MoveRight')
-        }
+            if (keys.d) {
+                hull.x += stored_transfer.player.speed
+                socket.readyState === socket.OPEN && send('MoveRight')
+            }
 
-        if (keys.w) {
-            hull.y -= state.player.speed
-            socket.readyState === socket.OPEN && send('MoveUp')
-        }
+            if (keys.w) {
+                hull.y -= stored_transfer.player.speed
+                socket.readyState === socket.OPEN && send('MoveUp')
+            }
 
-        if (keys.s) {
-            hull.y += state.player.speed
-            socket.readyState === socket.OPEN && send('MoveDown')
+            if (keys.s) {
+                hull.y += stored_transfer.player.speed
+                socket.readyState === socket.OPEN && send('MoveDown')
+            }
         }
     })
 }
