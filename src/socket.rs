@@ -1,9 +1,16 @@
-use std::time::{Instant, Duration};
-use actix::{Actor, StreamHandler, AsyncContext, ActorContext, Addr, Handler};
+use std::time::{Duration, Instant};
+
+use actix::{Actor, ActorContext, Addr, AsyncContext, Handler, StreamHandler};
 use actix_web_actors::ws;
-use crate::{world, transfer};
 use rand::prelude::ThreadRng;
 use rand::Rng;
+
+use crate::world::world::{World, Message};
+use crate::transfer::Operation;
+use crate::world::messages::connect::Connect;
+use crate::world::messages::join::JoinInstance;
+use crate::world::messages::update::UpdatePlayer;
+use crate::world::messages::disconnect::Disconnect;
 
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
@@ -11,7 +18,7 @@ const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
 pub struct MainWebSocket {
     session_id: usize,
     hb: Instant,
-    world: Addr<world::World>,
+    world: Addr<World>,
     rng: ThreadRng,
 }
 
@@ -23,7 +30,7 @@ impl Actor for MainWebSocket {
 
         self.session_id = self.rng.gen::<usize>();
 
-        self.world.do_send(world::Connect {
+        self.world.do_send(Connect {
             session_id: self.session_id,
             addr: ctx.address().recipient(),
         });
@@ -43,17 +50,17 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
                 self.hb = Instant::now();
             }
             Ok(ws::Message::Text(text)) => {
-                let operation: transfer::Operation = match serde_json::from_str(&*text) {
+                let operation: Operation = match serde_json::from_str(&*text) {
                     Ok(operation) => operation,
-                    Err(_error) => transfer::Operation::default()
+                    Err(_error) => Operation::default()
                 };
 
                 match operation.command.trim() {
-                    "JoinInstance" => self.world.do_send(world::JoinInstance {
+                    "JoinInstance" => self.world.do_send(JoinInstance {
                         session_id: self.session_id,
                         instance_id: 0,
                     }),
-                    "MoveLeft" | "MoveRight" | "MoveUp" | "MoveDown" => self.world.do_send(world::UpdatePlayer {
+                    "MoveLeft" | "MoveRight" | "MoveUp" | "MoveDown" => self.world.do_send(UpdatePlayer {
                         session_id: self.session_id,
                         instance_id: 0,
                         operation,
@@ -70,16 +77,16 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
     }
 }
 
-impl Handler<world::Message> for MainWebSocket {
+impl Handler<Message> for MainWebSocket {
     type Result = ();
 
-    fn handle(&mut self, msg: world::Message, ctx: &mut Self::Context) {
+    fn handle(&mut self, msg: Message, ctx: &mut Self::Context) {
         ctx.text(msg.0);
     }
 }
 
 impl MainWebSocket {
-    pub fn new(world: Addr<world::World>) -> Self {
+    pub fn new(world: Addr<World>) -> Self {
         Self {
             session_id: 0,
             hb: Instant::now(),
@@ -93,7 +100,7 @@ impl MainWebSocket {
             if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
                 println!("Websocket Client heartbeat failed, disconnecting!");
 
-                act.world.do_send(world::Disconnect {
+                act.world.do_send(Disconnect {
                     id: act.session_id
                 });
 

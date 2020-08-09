@@ -5,8 +5,8 @@ mod socket;
 use actix_files as fs;
 use actix_web::{web, App, HttpServer, Result, HttpRequest, HttpResponse, Error, middleware};
 use actix_web_actors::{ws};
-use crate::world::World;
 use actix::{Actor, Addr};
+use crate::world::world::World;
 
 async fn ws_index(req: HttpRequest, stream: web::Payload, srv: web::Data<Addr<World>>) -> Result<HttpResponse, Error> {
     println!("{:?}", req);
