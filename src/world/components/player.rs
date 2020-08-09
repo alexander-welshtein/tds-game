@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use crate::transfer::Operation;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Player {
     pub x: isize,
     pub y: isize,

@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use actix::clock::Duration;
 use actix::prelude::*;
 
-use crate::transfer::{Operation, Transfer};
+use crate::transfer::{Transfer};
 use crate::world::components::instance::Instance;
 use crate::world::components::player::Player;
 
@@ -34,15 +34,12 @@ impl World {
             for (session_id, player) in &instance.players {
                 if let Some(addr) = self.sessions.get(&session_id) {
                     if let Ok(result) = serde_json::to_string(&Transfer {
-                        player: Player {
-                            x: player.x,
-                            y: player.y,
-                            speed: player.speed,
-                            operation: Operation {
-                                id: player.operation.id,
-                                command: player.operation.command.clone()
-                            }
-                        },
+                        player: player.clone(),
+                        players: instance.players
+                            .iter()
+                            .filter(|(player_session_id, _)| *player_session_id != session_id)
+                            .map(|(_, player)| player.clone())
+                            .collect(),
                     }) {
                         addr.do_send(Message(result));
                     }

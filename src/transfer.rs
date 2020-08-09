@@ -3,18 +3,20 @@ use crate::world::components::player::Player;
 
 #[derive(Serialize, Deserialize)]
 pub struct Transfer {
-    pub player: Player
+    pub player: Player,
+    pub players: Vec<Player>
 }
 
 impl Default for Transfer {
     fn default() -> Self {
         Self {
-            player: Player::default()
+            player: Player::default(),
+            players: Vec::default()
         }
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Operation {
     pub id: isize,
     pub command: String,
