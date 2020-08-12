@@ -30,11 +30,11 @@ impl Default for World {
 impl World {
     fn tick(&mut self, _: &mut Context<Self>) {
         for (_, instance) in &self.instances {
-            for (session_id, player) in &instance.players {
+            for (session_id, player) in instance.get_players() {
                 if let Some(addr) = self.sessions.get(&session_id) {
                     if let Ok(result) = serde_json::to_string(&Transfer {
                         player: player.clone(),
-                        players: instance.players
+                        players: instance.get_players()
                             .iter()
                             .filter(|(player_session_id, _)| *player_session_id != session_id)
                             .map(|(_, player)| player.clone())

@@ -16,7 +16,7 @@ impl Handler<Disconnect> for World {
         self.sessions.remove(&msg.session_id);
 
         for (_, instance) in &mut self.instances {
-            instance.players.remove(&msg.session_id);
+            instance.remove_player(msg.session_id);
         }
 
         println!("Disconnect: session_id = {:?}", msg.session_id);

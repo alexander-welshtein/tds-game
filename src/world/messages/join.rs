@@ -1,7 +1,6 @@
 use actix::{Context, Handler};
 use actix::prelude::*;
 
-use crate::world::components::player::Player;
 use crate::world::world::World;
 
 #[derive(Message)]
@@ -18,7 +17,7 @@ impl Handler<JoinInstance> for World {
         let JoinInstance { session_id, instance_id } = msg;
 
         if let Some(instance) = self.instances.get_mut(&instance_id) {
-            instance.players.insert(session_id, Player::default());
+            instance.add_player(session_id);
             println!("JoinInstance: session_id = {:?} instance_id = {:?}", session_id, instance_id);
         } else {
             println!("[Failed] JoinInstance: instance_id = {:?}", instance_id);
