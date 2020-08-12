@@ -17,9 +17,11 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info");
     env_logger::init();
 
-    HttpServer::new(|| App::new()
+    let world = World::default().start();
+
+    HttpServer::new(move || App::new()
         // .wrap(middleware::Logger::default())
-        .data(World::default().start())
+        .data(world.clone())
         .service(web::resource("/ws/").route(web::get().to(ws_index)))
         .service(fs::Files::new("/", "public/dist").index_file("index.html")))
         .bind("localhost:3000")?

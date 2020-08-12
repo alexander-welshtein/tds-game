@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use actix::clock::Duration;
 use actix::prelude::*;
 
-use crate::transfer::{Transfer};
+use crate::transfer::Transfer;
 use crate::world::components::instance::Instance;
 
 #[derive(Message)]

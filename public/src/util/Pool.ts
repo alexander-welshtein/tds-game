@@ -13,10 +13,6 @@ export class Pool<T> {
     get(): T {
         const object = this.freeObjects.pop() || this.creator()
         this.usedObjects.push(object)
-
-        console.log(this.usedObjects)
-        console.log(this.freeObjects)
-
         return object
     }
 
