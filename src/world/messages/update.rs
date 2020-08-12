@@ -20,15 +20,7 @@ impl Handler<UpdatePlayer> for World {
 
         if let Some(instance) = self.instances.get_mut(&instance_id) {
             if let Some(player) = instance.get_player(session_id) {
-                match operation.command.as_str() {
-                    "MoveLeft" => player.x -= player.speed,
-                    "MoveRight" => player.x += player.speed,
-                    "MoveUp" => player.y -= player.speed,
-                    "MoveDown" => player.y += player.speed,
-                    _ => {}
-                };
-
-                player.operation = operation;
+                player.apply_operation(operation)
             }
         };
     }
