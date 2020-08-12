@@ -1,19 +1,22 @@
 import * as PIXI from "pixi.js"
 import "assets/hull.png"
-import {Client} from "./Client";
+import {Provider} from "./provider/Provider";
+import {Renderer} from "./Renderer";
 
-const app = new PIXI.Application()
+const application = new PIXI.Application()
 
-document.body.appendChild(app.view)
+document.body.appendChild(application.view)
 
-app.loader.add([
+application.loader.add([
     {
         name: 'hull',
         url: 'hull.png'
     }
 ]).load((loader, resources) => {
-    Client({
-        app,
-        hullTexture: resources.hull.texture
-    })
+
+    const provider = new Provider()
+    provider.initialize()
+
+    const renderer = new Renderer(provider)
+    renderer.initialize(application, resources)
 })
