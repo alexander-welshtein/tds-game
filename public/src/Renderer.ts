@@ -10,12 +10,13 @@ export class Renderer {
     initialize(application: PIXI.Application, resources: any) {
         PlayerView.initialize(application, resources)
 
-        const mainPlayerView: PlayerView = PlayerView.create()
+        let mainPlayerView: PlayerView
 
         this.provider.setOnTransfer(transfer => {
             PlayerView.hideAll()
 
             if (transfer.player) {
+                mainPlayerView = PlayerView.create()
                 mainPlayerView.setPosition(transfer.player.x, transfer.player.y)
                 mainPlayerView.show()
             }
