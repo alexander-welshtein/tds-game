@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use actix::{Actor, ActorContext, Addr, AsyncContext, Handler, StreamHandler};
+use actix::{Actor, ActorContext, Addr, AsyncContext, Handler, StreamHandler, Running};
 use actix_web_actors::ws;
 use rand::prelude::ThreadRng;
 use rand::Rng;
@@ -34,6 +34,13 @@ impl Actor for MainWebSocket {
             session_id: self.session_id,
             addr: ctx.address().recipient(),
         });
+    }
+
+    fn stopping(&mut self, _: &mut Self::Context) -> Running {
+        self.world.do_send(Disconnect {
+            session_id: self.session_id
+        });
+        Running::Stop
     }
 }
 
