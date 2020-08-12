@@ -6,14 +6,20 @@ use crate::world::world::World;
 #[derive(Message)]
 #[rtype(result = "()")]
 pub struct Disconnect {
-    pub id: usize
+    pub session_id: usize
 }
 
 impl Handler<Disconnect> for World {
     type Result = ();
 
     fn handle(&mut self, msg: Disconnect, _: &mut Context<Self>) {
-        self.sessions.remove(&msg.id);
+        self.sessions.remove(&msg.session_id);
+
+        for (_, instance) in &mut self.instances {
+            instance.players.remove(&msg.session_id);
+        }
+
+        println!("Disconnect: session_id = {:?}", msg.session_id);
     }
 }
 

@@ -39,8 +39,6 @@ impl Actor for MainWebSocket {
 
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
-        println!("message: {:?}", msg);
-
         match msg {
             Ok(ws::Message::Ping(msg)) => {
                 self.hb = Instant::now();
@@ -98,10 +96,8 @@ impl MainWebSocket {
     fn hb(&self, ctx: &mut <Self as Actor>::Context) {
         ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
             if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
-                println!("Websocket Client heartbeat failed, disconnecting!");
-
                 act.world.do_send(Disconnect {
-                    id: act.session_id
+                    session_id: act.session_id
                 });
 
                 ctx.stop();

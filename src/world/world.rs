@@ -5,7 +5,6 @@ use actix::prelude::*;
 
 use crate::transfer::{Transfer};
 use crate::world::components::instance::Instance;
-use crate::world::components::player::Player;
 
 #[derive(Message)]
 #[rtype(result = "()")]
@@ -19,7 +18,7 @@ pub struct World {
 impl Default for World {
     fn default() -> Self {
         let mut instances = HashMap::new();
-        instances.insert(0, Instance::new());
+        instances.insert(0, Instance::default());
 
         Self {
             sessions: Default::default(),
@@ -41,7 +40,7 @@ impl World {
                             .map(|(_, player)| player.clone())
                             .collect(),
                     }) {
-                        addr.do_send(Message(result));
+                        addr.do_send(Message(result)).ok();
                     }
                 }
             }

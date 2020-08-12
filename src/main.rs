@@ -9,7 +9,6 @@ use actix::{Actor, Addr};
 use crate::world::world::World;
 
 async fn ws_index(req: HttpRequest, stream: web::Payload, srv: web::Data<Addr<World>>) -> Result<HttpResponse, Error> {
-    println!("{:?}", req);
     ws::start(socket::MainWebSocket::new(srv.get_ref().clone()), &req, stream)
 }
 
@@ -19,7 +18,7 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
 
     HttpServer::new(|| App::new()
-        .wrap(middleware::Logger::default())
+        // .wrap(middleware::Logger::default())
         .data(World::default().start())
         .service(web::resource("/ws/").route(web::get().to(ws_index)))
         .service(fs::Files::new("/", "public/dist").index_file("index.html")))

@@ -7,8 +7,8 @@ pub struct Instance {
     pub players: HashMap<usize, Player>
 }
 
-impl Instance {
-    pub fn new() -> Self {
+impl Default for Instance {
+    fn default() -> Self {
         Self {
             players: HashMap::new()
         }

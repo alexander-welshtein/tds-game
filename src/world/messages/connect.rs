@@ -14,8 +14,8 @@ impl Handler<Connect> for World {
     type Result = ();
 
     fn handle(&mut self, msg: Connect, _: &mut Context<Self>) {
-        println!("Connected: id = {:?}", msg.session_id);
         self.sessions.insert(msg.session_id, msg.addr);
+        println!("Connect: session_id = {:?}", msg.session_id);
     }
 }
 

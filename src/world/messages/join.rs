@@ -19,9 +19,9 @@ impl Handler<JoinInstance> for World {
 
         if let Some(instance) = self.instances.get_mut(&instance_id) {
             instance.players.insert(session_id, Player::default());
-            println!("Session {:?} join to instance {:?}", session_id, instance_id);
+            println!("JoinInstance: session_id = {:?} instance_id = {:?}", session_id, instance_id);
         } else {
-            println!("Unsuccessful attempt to join an instance {:?}", instance_id);
+            println!("[Failed] JoinInstance: instance_id = {:?}", instance_id);
         }
     }
 }
