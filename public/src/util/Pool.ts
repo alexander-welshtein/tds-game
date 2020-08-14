@@ -21,7 +21,7 @@ export class Pool<T> {
         this.usedObjects.splice(this.usedObjects.indexOf(object), 1)
     }
 
-    forEachUsed(handler: (object: T) => void) {
+    forEach(handler: (object: T, index?: number) => void) {
         this.usedObjects.forEach(item => handler(item))
     }
 

@@ -1,21 +1,32 @@
+use rand::prelude::ThreadRng;
+use rand::Rng;
 use serde::{Deserialize, Serialize};
+
 use crate::transfer::Operation;
+use crate::utils::as_json_string;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Player {
+    #[serde(with = "as_json_string")]
+    id: usize,
+
     x: isize,
     y: isize,
     speed: isize,
-    operation: Operation,
+    operation: Operation
 }
 
 impl Default for Player {
     fn default() -> Self {
+
+        let mut rng = ThreadRng::default();
+
         Self {
+            id: rng.gen::<usize>(),
             x: 0,
             y: 0,
             speed: 5,
-            operation: Operation::default(),
+            operation: Operation::default()
         }
     }
 }

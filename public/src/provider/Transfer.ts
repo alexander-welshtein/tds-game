@@ -11,6 +11,7 @@ export interface Operation {
 }
 
 export interface Player {
+    id: string
     x: number
     y: number
     speed: number
