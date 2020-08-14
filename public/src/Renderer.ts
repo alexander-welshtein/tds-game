@@ -13,11 +13,11 @@ export class Renderer {
 
         let entity: PlayerEntity
 
-        this.provider.setOnTransfer(transfer => {
+        this.provider.setOnTransfer(state => {
             PlayerEntity.hideAll()
 
-            transfer.player && (entity = PlayerEntity.create(transfer.player.id)).applyTransfer(transfer.player)
-            transfer.players && transfer.players.forEach(player => PlayerEntity.create(player.id).applyTransfer(player))
+            state.player && (entity = PlayerEntity.create(state.player.id)).applyTransfer(state.player)
+            state.players && state.players.forEach(player => PlayerEntity.create(player.id).applyTransfer(player))
         })
 
         const keys = {
@@ -35,26 +35,20 @@ export class Renderer {
         application.ticker.add(deltaTime => {
             PlayerEntity.updateAll(deltaTime)
 
-            if (this.provider.getStoredTransfer()) {
-                if (keys.a) {
-                    // entity.moveX(-this.provider.getStoredTransfer().player.speed)
-                    this.provider.sendCommand("MoveLeft")
-                }
+            if (keys.a) {
+                this.provider.sendCommand("MoveLeft")
+            }
 
-                if (keys.d) {
-                    // entity.moveX(this.provider.getStoredTransfer().player.speed)
-                    this.provider.sendCommand("MoveRight")
-                }
+            if (keys.d) {
+                this.provider.sendCommand("MoveRight")
+            }
 
-                if (keys.w) {
-                    // entity.moveY(-this.provider.getStoredTransfer().player.speed)
-                    this.provider.sendCommand("MoveUp")
-                }
+            if (keys.w) {
+                this.provider.sendCommand("MoveUp")
+            }
 
-                if (keys.s) {
-                    // entity.moveY(this.provider.getStoredTransfer().player.speed)
-                    this.provider.sendCommand("MoveDown")
-                }
+            if (keys.s) {
+                this.provider.sendCommand("MoveDown")
             }
         })
     }

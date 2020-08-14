@@ -1,6 +1,6 @@
 import {Command} from "./Command";
 
-export interface Transfer {
+export interface State {
     player: Player
     players: Player[]
 }
@@ -15,5 +15,4 @@ export interface Player {
     x: number
     y: number
     speed: number
-    operation: Operation
 }

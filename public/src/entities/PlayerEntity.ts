@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js"
-import {Player} from "../provider/Transfer";
+import {Player} from "../provider/State";
 
 export class PlayerEntity {
 
@@ -45,29 +45,32 @@ export class PlayerEntity {
     update(deltaTime: number) {
         const delta = 5 * deltaTime
 
-        if (this.sprite.x < this.resultX) {
-            this.sprite.x += delta
-            if (this.sprite.x > this.resultX - delta) {
-                this.sprite.x = this.resultX
-            }
-        } else if (this.sprite.x > this.resultX) {
-            this.sprite.x -= delta
-            if (this.sprite.x < this.resultX + delta) {
-                this.sprite.x = this.resultX
-            }
-        }
+        this.sprite.x = this.resultX
+        this.sprite.y = this.resultY
 
-        if (this.sprite.y < this.resultY) {
-            this.sprite.y += delta
-            if (this.sprite.y > this.resultY - delta) {
-                this.sprite.y = this.resultY
-            }
-        } else if (this.sprite.y > this.resultY) {
-            this.sprite.y -= delta
-            if (this.sprite.y < this.resultY + delta) {
-                this.sprite.y = this.resultY
-            }
-        }
+        // if (this.sprite.x < this.resultX) {
+        //     this.sprite.x += delta
+        //     if (this.sprite.x > this.resultX - delta) {
+        //         this.sprite.x = this.resultX
+        //     }
+        // } else if (this.sprite.x > this.resultX) {
+        //     this.sprite.x -= delta
+        //     if (this.sprite.x < this.resultX + delta) {
+        //         this.sprite.x = this.resultX
+        //     }
+        // }
+        //
+        // if (this.sprite.y < this.resultY) {
+        //     this.sprite.y += delta
+        //     if (this.sprite.y > this.resultY - delta) {
+        //         this.sprite.y = this.resultY
+        //     }
+        // } else if (this.sprite.y > this.resultY) {
+        //     this.sprite.y -= delta
+        //     if (this.sprite.y < this.resultY + delta) {
+        //         this.sprite.y = this.resultY
+        //     }
+        // }
     }
 
     applyTransfer(player: Player) {

@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 use crate::world::components::player::Player;
 
 #[derive(Serialize, Deserialize)]
-pub struct Transfer {
+pub struct State {
     pub player: Player,
     pub players: Vec<Player>
 }
 
-impl Default for Transfer {
+impl Default for State {
     fn default() -> Self {
         Self {
             player: Player::default(),

@@ -1,7 +1,7 @@
 use actix::{Context, Handler};
 use actix::prelude::*;
 
-use crate::transfer::Operation;
+use crate::state::Operation;
 use crate::world::world::World;
 
 #[derive(Message)]
@@ -20,7 +20,7 @@ impl Handler<UpdatePlayer> for World {
 
         if let Some(instance) = self.instances.get_mut(&instance_id) {
             if let Some(player) = instance.get_player(session_id) {
-                player.apply_operation(operation)
+                player.add_operation(operation)
             }
         };
     }

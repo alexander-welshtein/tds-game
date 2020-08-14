@@ -31,4 +31,8 @@ impl Instance {
     pub fn get_players(&self) -> &HashMap<usize, Player> {
         &self.players
     }
+
+    pub fn get_players_mut(&mut self) -> &mut HashMap<usize, Player> {
+        &mut self.players
+    }
 }

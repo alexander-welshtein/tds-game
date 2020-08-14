@@ -6,7 +6,7 @@ use rand::prelude::ThreadRng;
 use rand::Rng;
 
 use crate::world::world::{World, Message};
-use crate::transfer::Operation;
+use crate::state::Operation;
 use crate::world::messages::connect::Connect;
 use crate::world::messages::join::JoinInstance;
 use crate::world::messages::update::UpdatePlayer;

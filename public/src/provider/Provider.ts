@@ -1,12 +1,11 @@
-import {Operation, Transfer} from "./Transfer";
+import {Operation, State} from "./State";
 import {MathSet} from "../MathSet";
 import {Command} from "./Command";
 
 export class Provider {
 
     private socket: WebSocket
-    private onTransfer: (transfer: Transfer) => void
-    private storedTransfer: Transfer
+    private onState: (state: State) => void
 
 
     initialize() {
@@ -17,20 +16,14 @@ export class Provider {
         })
 
         this.socket.addEventListener("message", event => {
-            const transfer = JSON.parse(event.data) as Transfer
-            this.onTransfer && (!this.storedTransfer || transfer.player.operation.id == this.storedTransfer.player.operation.id) && this.onTransfer(transfer)
-            this.storedTransfer = transfer
+            const state = JSON.parse(event.data) as State
+            this.onState && this.onState(state)
         })
     }
 
-    setOnTransfer(onTransfer: (transfer: Transfer) => void) {
-        this.onTransfer = onTransfer
+    setOnTransfer(onTransfer: (state: State) => void) {
+        this.onState = onTransfer
     }
-
-    getStoredTransfer() {
-        return this.storedTransfer
-    }
-
 
     sendCommand(command: keyof Command) {
         this.socket.readyState === this.socket.OPEN && this.socket.send(JSON.stringify({
