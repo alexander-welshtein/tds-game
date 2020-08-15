@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js"
 import {Provider} from "./provider/Provider";
 import {PlayerEntity} from "./entities/PlayerEntity";
+import {State} from "./provider/State";
 
 export class Renderer {
 
@@ -11,14 +12,9 @@ export class Renderer {
     initialize(application: PIXI.Application, resources: any) {
         PlayerEntity.initialize(application, resources)
 
-        let entity: PlayerEntity
+        const states: State[] = []
 
-        this.provider.setOnTransfer(state => {
-            PlayerEntity.hideAll()
-
-            state.player && (entity = PlayerEntity.create(state.player.id)).applyTransfer(state.player)
-            state.players && state.players.forEach(player => PlayerEntity.create(player.id).applyTransfer(player))
-        })
+        this.provider.setOnState(state => states.push(state))
 
         const keysState = {
             a: false,
@@ -53,8 +49,15 @@ export class Renderer {
             this.provider.sendCommand(`${keysCommands[key]}Up` as any)
         }))
 
+        application.ticker.add(() => {
+            const state = states.pop()
+            states.length = 0
+            state && PlayerEntity.applyState(state)
+        })
+
         application.ticker.add(deltaTime => {
-            PlayerEntity.updateAll(deltaTime)
+            PlayerEntity.update(deltaTime)
+            states.length = 0
         })
     }
 

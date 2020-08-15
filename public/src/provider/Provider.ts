@@ -21,8 +21,8 @@ export class Provider {
         })
     }
 
-    setOnTransfer(onTransfer: (state: State) => void) {
-        this.onState = onTransfer
+    setOnState(onState: (state: State) => void) {
+        this.onState = onState
     }
 
     sendCommand(command: keyof Command) {

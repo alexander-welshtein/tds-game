@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js"
-import {Player} from "../provider/State";
+import {Player, State} from "../provider/State";
 
 export class PlayerEntity {
 
@@ -33,11 +33,13 @@ export class PlayerEntity {
         }
     }
 
-    static hideAll() {
+    static applyState(state: State) {
         this.entities.forEach(entity => entity.hide())
+        state.player && PlayerEntity.create(state.player.id).applyState(state.player)
+        state.players && state.players.forEach(player => PlayerEntity.create(player.id).applyState(player))
     }
 
-    static updateAll(deltaTime: number) {
+    static update(deltaTime: number) {
         this.entities.forEach(entity => entity.update(deltaTime))
     }
 
@@ -73,18 +75,10 @@ export class PlayerEntity {
         // }
     }
 
-    applyTransfer(player: Player) {
+    applyState(player: Player) {
         this.resultX = player.x
         this.resultY = player.y
         this.sprite.visible = true
-    }
-
-    moveX(x: number) {
-        this.sprite.x += x
-    }
-
-    moveY(y: number) {
-        this.sprite.y += y
     }
 
     hide() {
