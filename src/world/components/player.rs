@@ -15,20 +15,33 @@ pub struct Player {
     speed: isize,
 
     #[serde(skip)]
-    operations: Vec<Operation>
+    should_move_left: bool,
+    #[serde(skip)]
+    should_move_right: bool,
+    #[serde(skip)]
+    should_move_up: bool,
+    #[serde(skip)]
+    should_move_down: bool,
+
+    #[serde(skip)]
+    operations: Vec<Operation>,
 }
 
 impl Default for Player {
     fn default() -> Self {
-
-        let mut rng = ThreadRng::default();
-
         Self {
-            id: rng.gen::<usize>(),
+            id: ThreadRng::default().gen::<usize>(),
+
             x: 0,
             y: 0,
-            speed: 5,
-            operations: Vec::default()
+            speed: 10,
+
+            should_move_left: false,
+            should_move_right: false,
+            should_move_up: false,
+            should_move_down: false,
+
+            operations: Vec::default(),
         }
     }
 }
@@ -38,19 +51,35 @@ impl Player {
         self.operations.push(operation)
     }
 
-    pub fn handle_operations(&mut self) {
-        while let Some(operation) = self.operations.pop().clone() {
-            self.apply_operation(operation);
+    pub fn update(&mut self) {
+        while let Some(operation) = self.operations.pop() {
+            match operation.command.as_str() {
+                "KeyLeftDown" => self.should_move_left = true,
+                "KeyLeftUp" => self.should_move_left = false,
+                "KeyRightDown" => self.should_move_right = true,
+                "KeyRightUp" => self.should_move_right = false,
+                "KeyUpDown" => self.should_move_up = true,
+                "KeyUpUp" => self.should_move_up = false,
+                "KeyDownDown" => self.should_move_down = true,
+                "KeyDownUp" => self.should_move_down = false,
+                _ => {}
+            };
         }
-    }
 
-    fn apply_operation(&mut self, operation: Operation) {
-        match operation.command.as_str() {
-            "MoveLeft" => self.x -= self.speed,
-            "MoveRight" => self.x += self.speed,
-            "MoveUp" => self.y -= self.speed,
-            "MoveDown" => self.y += self.speed,
-            _ => {}
-        };
+        if self.should_move_left {
+            self.x -= self.speed
+        }
+
+        if self.should_move_right {
+            self.x += self.speed
+        }
+
+        if self.should_move_up {
+            self.y -= self.speed
+        }
+
+        if self.should_move_down {
+            self.y += self.speed
+        }
     }
 }

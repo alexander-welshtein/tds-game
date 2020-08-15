@@ -1,7 +1,12 @@
 export interface Command {
     JoinInstance: "JoinInstance",
-    MoveLeft: "MoveLeft",
-    MoveRight: "MoveRight",
-    MoveUp: "MoveUp",
-    MoveDown: "MoveDown"
+
+    KeyLeftDown: "KeuLeftDown",
+    KeyLeftUp: "KeyLeftUp",
+    KeyRightDown: "KeyRightDown",
+    KeyRightUp: "KeyRightUp",
+    KeyUpDown: "KeyUpDown",
+    KeyUpUp: "KeyUpUp",
+    KeyDownDown: "KeyDownDown",
+    KeyDownUp: "KeyDownUp"
 }

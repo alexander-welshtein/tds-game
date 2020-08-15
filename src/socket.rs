@@ -61,16 +61,16 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MainWebSocket {
                 };
 
                 match operation.command.trim() {
+                    // TODO: Shit!
                     "JoinInstance" => self.world.do_send(JoinInstance {
                         session_id: self.session_id,
                         instance_id: 0,
                     }),
-                    "MoveLeft" | "MoveRight" | "MoveUp" | "MoveDown" => self.world.do_send(UpdatePlayer {
+                    _ => self.world.do_send(UpdatePlayer {
                         session_id: self.session_id,
                         instance_id: 0,
                         operation,
                     }),
-                    _ => ()
                 };
             }
             Ok(ws::Message::Close(reason)) => {

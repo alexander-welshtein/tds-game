@@ -20,36 +20,41 @@ export class Renderer {
             state.players && state.players.forEach(player => PlayerEntity.create(player.id).applyTransfer(player))
         })
 
-        const keys = {
+        const keysState = {
             a: false,
             d: false,
             w: false,
             s: false
         }
 
-        Object.keys(keys).forEach(key => {
-            window.addEventListener('keydown', e => e.key == key && (keys[key] = true))
-            window.addEventListener('keyup', e => e.key == key && (keys[key] = false))
+        const keysCommands = {
+            a: "KeyLeft",
+            d: "KeyRight",
+            w: "KeyUp",
+            s: "KeyDown"
+        }
+
+        window.addEventListener('keydown', e => {
+            if (!keysState[e.key]) {
+                keysState[e.key] = true
+                this.provider.sendCommand(`${keysCommands[e.key]}Down` as any)
+            }
         })
+
+        window.addEventListener('keyup', e => {
+            if (keysState[e.key]) {
+                keysState[e.key] = false
+                this.provider.sendCommand(`${keysCommands[e.key]}Up` as any)
+            }
+        })
+
+        document.addEventListener('visibilitychange', () => Object.keys(keysState).forEach(key => {
+            keysState[key] = false;
+            this.provider.sendCommand(`${keysCommands[key]}Up` as any)
+        }))
 
         application.ticker.add(deltaTime => {
             PlayerEntity.updateAll(deltaTime)
-
-            if (keys.a) {
-                this.provider.sendCommand("MoveLeft")
-            }
-
-            if (keys.d) {
-                this.provider.sendCommand("MoveRight")
-            }
-
-            if (keys.w) {
-                this.provider.sendCommand("MoveUp")
-            }
-
-            if (keys.s) {
-                this.provider.sendCommand("MoveDown")
-            }
         })
     }
 

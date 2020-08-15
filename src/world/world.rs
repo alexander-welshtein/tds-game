@@ -31,7 +31,7 @@ impl World {
     fn update(&mut self, _: &mut Context<Self>) {
         for (_, instance) in self.instances.iter_mut() {
             for (_, player) in instance.get_players_mut() {
-                player.handle_operations()
+                player.update()
             }
         }
     }
