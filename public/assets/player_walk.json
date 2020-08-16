@@ -1,0 +1,149 @@
+{
+  "frames": {
+    "GunnerWalk_1.png": {
+      "frame": {
+        "x": 16,
+        "y": 27,
+        "w": 15,
+        "h": 31
+      },
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 32,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "GunnerWalk_2.png": {
+      "frame": {
+        "x": 32,
+        "y": 21,
+        "w": 15,
+        "h": 26
+      },
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 35,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "GunnerWalk_3.png": {
+      "frame": {
+        "x": 32,
+        "y": 0,
+        "w": 15,
+        "h": 20
+      },
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 38,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "GunnerWalk_4.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 29
+      },
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 33,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "GunnerWalk_5.png": {
+      "frame": {
+        "x": 16,
+        "y": 0,
+        "w": 15,
+        "h": 26
+      },
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 35,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "GunnerWalk_6.png": {
+      "frame": {
+        "x": 0,
+        "y": 30,
+        "w": 15,
+        "h": 22
+      },
+      "spriteSourceSize": {
+        "x": 40,
+        "y": 37,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "GunnerWalk_7.png": {
+      "frame": {
+        "x": 48,
+        "y": 0,
+        "w": 14,
+        "h": 19
+      },
+      "spriteSourceSize": {
+        "x": 41,
+        "y": 38,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    }
+  },
+  "animations": {
+    "GunnerWalk": [
+      "GunnerWalk_1.png",
+      "GunnerWalk_2.png",
+      "GunnerWalk_3.png",
+      "GunnerWalk_4.png",
+      "GunnerWalk_5.png",
+      "GunnerWalk_6.png",
+      "GunnerWalk_7.png"
+    ]
+  },
+  "meta": {
+    "image": "player_walk.png",
+    "size": {
+      "w": 63,
+      "h": 59
+    },
+    "scale": "1"
+  }
+}

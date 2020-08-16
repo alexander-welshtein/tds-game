@@ -1,5 +1,6 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     entry: "./public/src/index.ts",
@@ -13,22 +14,21 @@ module.exports = {
             assets: path.join(__dirname, "public/assets")
         }
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: "./public/src/index.html"
-    })],
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: "./public/src/index.html"
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'public/assets' }
+            ]
+        })
+    ],
     module: {
         rules: [
             {
                 test: /\.ts$/,
                 use: "ts-loader",
-                exclude: /node_modules/
-            },
-            {
-                test: /\.(jpg|png)$/,
-                loader: "file-loader",
-                options: {
-                    name: "[name].[ext]"
-                },
                 exclude: /node_modules/
             }
         ]

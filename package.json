@@ -27,6 +27,7 @@
     "webpack-cli": "latest",
     "ts-loader": "latest",
     "file-loader": "latest",
-    "html-webpack-plugin": "latest"
+    "html-webpack-plugin": "latest",
+    "copy-webpack-plugin": "latest"
   }
 }

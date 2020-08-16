@@ -1,5 +1,4 @@
 import * as PIXI from "pixi.js"
-import "assets/hull.png"
 import {Provider} from "./provider/Provider";
 import {Renderer} from "./Renderer";
 
@@ -9,8 +8,8 @@ document.body.appendChild(application.view)
 
 application.loader.add([
     {
-        name: 'hull',
-        url: 'hull.png'
+        name: 'player_walk',
+        url: 'player_walk.json'
     }
 ]).load((loader, resources) => {
 

@@ -1,19 +1,22 @@
 import * as PIXI from "pixi.js"
 import {Player, State} from "../provider/State";
+import {Interpolation} from "../util/Interpolation";
 
 export class PlayerEntity {
 
     private static entities: Map<string, PlayerEntity>
     private static creator: () => PlayerEntity
 
-    private readonly sprite: PIXI.Sprite
+    private readonly sprite: PIXI.AnimatedSprite
 
     private resultX: number
     private resultY: number
 
 
     private constructor(application: PIXI.Application, resources: any) {
-        this.sprite = new PIXI.Sprite(resources.hull.texture)
+        this.sprite = new PIXI.AnimatedSprite(resources['player_walk'].spritesheet.animations['GunnerWalk'])
+        this.sprite.animationSpeed = .12
+        this.sprite.gotoAndPlay(0)
         application.stage.addChild(this.sprite)
     }
 
@@ -51,29 +54,13 @@ export class PlayerEntity {
     update(deltaTime: number) {
         const delta = deltaTime * 2
 
-        if (this.sprite.x < this.resultX) {
-            this.sprite.x += delta
-            if (this.sprite.x > this.resultX - delta) {
-                this.sprite.x = this.resultX
-            }
-        } else if (this.sprite.x > this.resultX) {
-            this.sprite.x -= delta
-            if (this.sprite.x < this.resultX + delta) {
-                this.sprite.x = this.resultX
-            }
-        }
+        this.sprite.x < this.resultX
+            ? this.sprite.x = Interpolation.increaseByDelta(this.sprite.x, this.resultX, delta)
+            : this.sprite.x = Interpolation.decreaseByDelta(this.sprite.x, this.resultX, delta)
 
-        if (this.sprite.y < this.resultY) {
-            this.sprite.y += delta
-            if (this.sprite.y > this.resultY - delta) {
-                this.sprite.y = this.resultY
-            }
-        } else if (this.sprite.y > this.resultY) {
-            this.sprite.y -= delta
-            if (this.sprite.y < this.resultY + delta) {
-                this.sprite.y = this.resultY
-            }
-        }
+        this.sprite.y < this.resultY
+            ? this.sprite.y = Interpolation.increaseByDelta(this.sprite.y, this.resultY, delta)
+            : this.sprite.y = Interpolation.decreaseByDelta(this.sprite.y, this.resultY, delta)
     }
 
     resume() {
