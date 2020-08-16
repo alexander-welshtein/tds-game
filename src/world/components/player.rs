@@ -34,7 +34,7 @@ impl Default for Player {
 
             x: 0,
             y: 0,
-            speed: 10,
+            speed: 20,
 
             should_move_left: false,
             should_move_right: false,

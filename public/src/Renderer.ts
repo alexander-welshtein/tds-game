@@ -30,34 +30,47 @@ export class Renderer {
             s: "KeyDown"
         }
 
-        window.addEventListener('keydown', e => {
-            if (!keysState[e.key]) {
-                keysState[e.key] = true
-                this.provider.sendCommand(`${keysCommands[e.key]}Down` as any)
+        window.addEventListener('keydown', event => {
+            if (!keysState[event.key]) {
+                keysState[event.key] = true
+                this.provider.sendCommand(`${keysCommands[event.key]}Down` as any)
             }
         })
 
-        window.addEventListener('keyup', e => {
-            if (keysState[e.key]) {
-                keysState[e.key] = false
-                this.provider.sendCommand(`${keysCommands[e.key]}Up` as any)
+        window.addEventListener('keyup', event => {
+            if (keysState[event.key]) {
+                keysState[event.key] = false
+                this.provider.sendCommand(`${keysCommands[event.key]}Up` as any)
             }
         })
+
+        let resumed = true
 
         document.addEventListener('visibilitychange', () => Object.keys(keysState).forEach(key => {
-            keysState[key] = false;
-            this.provider.sendCommand(`${keysCommands[key]}Up` as any)
+            if (document.hidden) {
+                keysState[key] = false;
+                this.provider.sendCommand(`${keysCommands[key]}Up` as any)
+            } else {
+                resumed = true
+            }
         }))
 
         application.ticker.add(() => {
             const state = states.pop()
             states.length = 0
-            state && PlayerEntity.applyState(state)
+
+            if (state) {
+                PlayerEntity.applyState(state)
+
+                if (resumed) {
+                    PlayerEntity.resume()
+                    resumed = false
+                }
+            }
         })
 
         application.ticker.add(deltaTime => {
-            PlayerEntity.update(deltaTime)
-            states.length = 0
+            !resumed && PlayerEntity.update(deltaTime)
         })
     }
 
